@@ -3,8 +3,6 @@ package com.lwn;
 import com.lwn.handlers.RootHandler;
 import com.lwn.handlers.TimeHandler;
 
-import java.io.IOException;
-
 public class Server {
 
     public static void main(String[] args) throws Exception {
