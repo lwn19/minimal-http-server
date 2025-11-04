@@ -46,6 +46,7 @@ public class HttpServer {
             String requestLine = in.readLine();
             if(requestLine == null) return;
             String [] parts = requestLine.split(" ");
+            if(parts.length < 2) return;
             String method = parts[0];
             String path = parts[1];
 
