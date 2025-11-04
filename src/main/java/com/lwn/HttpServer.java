@@ -1,6 +1,7 @@
 package com.lwn;
 
 import com.lwn.handlers.HttpHandler;
+import com.lwn.logger.Logger;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -31,6 +32,10 @@ public class HttpServer {
     }
 
     public void handleClient (Socket client) {
+
+        long start = System.currentTimeMillis();
+        String clientIp = client.getInetAddress().getHostAddress();
+
         try (
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(
@@ -46,6 +51,7 @@ public class HttpServer {
             String requestLine = in.readLine();
             if(requestLine == null) return;
             String [] parts = requestLine.split(" ");
+            if(parts.length < 2) return;
             String method = parts[0];
             String path = parts[1];
 
@@ -67,10 +73,14 @@ public class HttpServer {
             out.write(response.getBody());
             out.flush();
 
+            long elapsed = System.currentTimeMillis() - start;
+            Logger.info (method + " " + path + " (" + response.getStatus() + ") from" +
+                    clientIp + " in " + elapsed + "ms");
+
 
 
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            Logger.info("Error en cliente : " + clientIp + ": " + e.getMessage());
         }
     }
 }
